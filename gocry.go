@@ -120,7 +120,10 @@ func main() {
 	//
 	var keyUser string
 
-	keyUser = ""
+	//
+	//
+	//
+	keyUser = keyDefault
 
 	//
 	//
@@ -150,15 +153,6 @@ func main() {
 		switch stringCmd {
 
 		case "crypt":
-
-			stringCmd2 = strings.Trim(os.Args[x+1], "-")
-			stringCmd2 = strings.TrimSpace(stringCmd2)
-
-			if stringCmd2 != "" {
-
-				boldRed.Println("Error, command has no value!")
-				os.Exit(0)
-			}
 
 			cmdIn += 1
 
@@ -271,7 +265,7 @@ func main() {
 		// can
 		//
 
-		boldWhite.Println("Key used to encrypt: ", keyByte)
+		boldWhite.Println("Key used to encrypt: ", keyUser, " :: byte: ", keyByte)
 
 	} else {
 
