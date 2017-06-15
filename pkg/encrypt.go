@@ -20,7 +20,9 @@ import (
 	"crypto/rand"
 	"encoding/base32"
 	"encoding/base64"
+	"fmt"
 	"io"
+	"os"
 )
 
 //
@@ -74,7 +76,7 @@ func GetToken(length int) string {
 	//
 	if lengthPerm == 1 || lengthPerm == 2 || lengthPerm == 4 || lengthPerm == 8 || lengthPerm == 16 || lengthPerm == 32 || lengthPerm == 64 {
 
-		randomBytes := make([]byte, 256)
+		randomBytes := make([]byte, length)
 		_, err := rand.Read(randomBytes)
 		if err != nil {
 			panic(err)
@@ -86,4 +88,44 @@ func GetToken(length int) string {
 
 		return "Only multiples of 16, ex: 16, 32, 64, 128 .. max 1024"
 	}
+}
+
+//
+// Only multiples of 16, ex: 16, 32, 64, 128 .. max 1024
+//
+func ValidateKey(key string) {
+
+	//
+	// 16 / 32 / 64 / 128 / 256 / 512 / 1024
+	//
+	if len(key) < 16 || len(key) > 1024 {
+
+		fmt.Println("Only multiples of 16, ex: 16, 32, 64, 128 .. max 1024 Ex: [DKYPENJXW43SMOJCU6F5TMFVOUANMJNL]")
+		os.Exit(0)
+	}
+
+	lengthF := len(key)
+
+	//
+	//
+	//
+	if lengthF == 16 || lengthF == 32 || lengthF == 64 || lengthF == 128 || lengthF == 256 || lengthF == 512 || lengthF == 1024 {
+
+		//
+		// ok
+		//
+		return
+
+	} else {
+
+		fmt.Println("Only multiples of 16, ex: 16, 32, 64, 128 .. max 1024, Ex: [DKYPENJXW43SMOJCU6F5TMFVOUANMJNL]")
+		os.Exit(0)
+	}
+}
+
+func Exists(fileName string) bool {
+
+	_, err := os.Stat(fileName)
+
+	return !os.IsNotExist(err)
 }

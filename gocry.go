@@ -25,6 +25,10 @@ import (
 	cry "github.com/jeffotoni/gocry/pkg"
 )
 
+const (
+	keyDefault = "DKYPENJXW43SMOJCU6F5TMFVOUANMJNL"
+)
+
 func main() {
 
 	//
@@ -48,12 +52,22 @@ func main() {
 	//
 	//
 	//
-	flag.String("crypt", "32 bytes", "Ex: 16|32|64|128|256 bytes")
+	flag.String("crypt", "", "empty")
 
 	//
 	//
 	//
-	flag.String("descr", "key", "Ex: DKYPENJXW43SMOJCU6F5TMFVOUANMJNL")
+	flag.String("descr", "", "empty")
+
+	//
+	//
+	//
+	flag.String("key", "", "default 32 bytes: ["+keyDefault+"]")
+
+	//
+	//
+	//
+	flag.String("token", "32", "Generate token: 16|32|64|128|512|1024 bytes")
 
 	//
 	//
@@ -65,6 +79,7 @@ func main() {
 	//
 	sizeArgs := len(os.Args)
 
+	//fmt.Println(sizeArgs)
 	//
 	// Validate flags
 	// and Validate hidden flags
@@ -97,22 +112,25 @@ func main() {
 	//
 	//
 	//
-	var crypt int
-
-	//
-	//
-	//
-	crypt = 32
-
-	//
-	//
-	//
-	var descr string
-
-	//
-	//
-	//
 	var file string
+
+	file = ""
+	//
+	//
+	//
+	var keyUser string
+
+	keyUser = ""
+
+	//
+	//
+	//
+	var cmdIn int
+
+	cmdIn = 0
+	//
+	//
+	//
 
 	//
 	// Validate hidden flags
@@ -120,6 +138,10 @@ func main() {
 	for x := range os.Args {
 
 		stringCmd = strings.Trim(os.Args[x], "-")
+		stringCmd = strings.Trim(stringCmd, "/")
+		stringCmd = strings.Trim(stringCmd, ".")
+		stringCmd = strings.Trim(stringCmd, "-")
+
 		stringCmd = strings.TrimSpace(stringCmd)
 		stringCmd = strings.ToLower(stringCmd)
 
@@ -132,15 +154,13 @@ func main() {
 			stringCmd2 = strings.Trim(os.Args[x+1], "-")
 			stringCmd2 = strings.TrimSpace(stringCmd2)
 
-			if xx, err := strconv.Atoi(stringCmd2); err != nil {
+			if stringCmd2 != "" {
 
-				boldRed.Println("Error, Only multiple integers of 16!")
+				boldRed.Println("Error, command has no value!")
 				os.Exit(0)
-
-			} else {
-
-				crypt = xx
 			}
+
+			cmdIn += 1
 
 			//crypt = fmt.Sprintf("%d", stringCmd2)
 
@@ -148,13 +168,61 @@ func main() {
 
 			stringCmd2 = strings.Trim(os.Args[x+1], "-")
 			stringCmd2 = strings.TrimSpace(stringCmd2)
-			descr = fmt.Sprintf("%s", stringCmd2)
+
+			if stringCmd2 != "" {
+
+				boldRed.Println("Error, command has no value!")
+				os.Exit(0)
+			}
+
+			//descr = fmt.Sprintf("%s", stringCmd2)
+
+			cmdIn += 3
 
 		case "file":
 
 			stringCmd2 = strings.Trim(os.Args[x+1], "-")
 			stringCmd2 = strings.TrimSpace(stringCmd2)
 			file = fmt.Sprintf("%s", stringCmd2)
+
+			//
+			// exist file
+			//
+			if cry.Exists(file) != true {
+
+				boldRed.Println("Error, File does not exist!")
+				os.Exit(0)
+			}
+
+			cmdIn += 1
+
+		case "key":
+
+			stringCmd2 = strings.Trim(os.Args[x+1], "-")
+			stringCmd2 = strings.TrimSpace(stringCmd2)
+			keyUser = fmt.Sprintf("%s", stringCmd2)
+
+			//
+			// validate
+			//
+			cry.ValidateKey(keyUser)
+
+		case "token":
+
+			stringCmd2 = strings.Trim(os.Args[x+1], "-")
+			stringCmd2 = strings.TrimSpace(stringCmd2)
+
+			if tok, err := strconv.Atoi(stringCmd2); err != nil {
+
+				boldRed.Println("Error, Only multiple integers of 16!")
+				os.Exit(0)
+
+			} else {
+
+				tokenKey := cry.GetToken(tok)
+				boldRed.Println("Your token ["+stringCmd2+"] is: ", tokenKey)
+				os.Exit(0)
+			}
 
 		case "version":
 
@@ -183,16 +251,32 @@ func main() {
 		}
 	}
 
-	tokenKey := cry.GetToken(crypt)
-	fmt.Println(tokenKey)
+	var keyByte = []byte("")
 
-	key := []byte(tokenKey) // 32 bytes
+	//
+	// crypt == 2
+	//
+	// decry == 4
+	//
+	// key default
+	//
+	if cmdIn == 2 || cmdIn == 4 {
 
-	boldWhite.Println("Key used to encrypt: ", tokenKey)
+		if keyUser != "" {
 
-	fmt.Println("Key used to encrypt: ", key)
-	fmt.Println("Key used to encrypt: ", descr)
-	fmt.Println("Key used to encrypt: ", file)
-	fmt.Println("Key used to encrypt: ", crypt)
+			keyByte = []byte(keyUser) // 32 bytes | 64 bytes | 128 bytes ... max 1024 bytes
+		}
+
+		//
+		// can
+		//
+
+		boldWhite.Println("Key used to encrypt: ", keyByte)
+
+	} else {
+
+		flag.PrintDefaults()
+		os.Exit(0)
+	}
 
 }
