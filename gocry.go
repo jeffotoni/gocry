@@ -245,8 +245,6 @@ func main() {
 		}
 	}
 
-	var keyByte = []byte("")
-
 	//
 	// crypt == 2
 	//
@@ -254,36 +252,23 @@ func main() {
 	//
 	// key default
 	//
-	if cmdIn == 2 || cmdIn == 4 {
+	if cmdIn == 2 {
 
 		if keyUser == "" {
 
 			keyUser = keyDefault
 		}
 
-		keyByte = []byte(keyUser) // 32 bytes | 64 bytes | 128 bytes ... max 1024 bytes
-
-		// boldWhite.Println("Key used to encrypt: ", keyUser, " :: byte: ", keyByte)
-
-		FileL, _ := os.Open(file)
-
-		fi, _ := FileL.Stat()
-
-		data := make([]byte, 16*fi.Size())
-
-		count, _ := FileL.Read(data)
-
-		file_copy, _ := os.Create(file + ".crypt")
-
-		defer file_copy.Close()
-
-		ciphertext, _ := cry.Encrypt(keyByte, data[:count])
-
-		///gravando arquivo cryptografado
-		file_copy.Write(ciphertext)
+		cry.Crypt(keyUser, file)
 
 		boldWhite.Println("New file created and encrypted: [" + file + ".crypt" + "]")
 		boldWhite.Println("Used Key: [" + keyUser + "]")
+
+	} else if cmdIn == 4 {
+
+		//
+		// decrypt
+		//
 
 	} else {
 

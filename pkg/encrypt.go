@@ -51,6 +51,64 @@ func Encrypt(key, text []byte) ([]byte, error) {
 	return ciphertext, nil
 }
 
+func Crypt(keyUser string, file string) {
+
+	if Exists(file) != true {
+
+		fmt.Println("Error, File does not exist!")
+		os.Exit(0)
+	}
+
+	//
+	//
+	//
+	ValidateKey(keyUser)
+
+	//
+	// 32 bytes | 64 bytes | 128 bytes ... max 1024 bytes
+	//
+	keyByte := []byte(keyUser)
+
+	//
+	//
+	//
+	FileL, _ := os.Open(file)
+
+	//
+	//
+	//
+	fi, _ := FileL.Stat()
+
+	//
+	//
+	//
+	data := make([]byte, 16*fi.Size())
+
+	//
+	//
+	//
+	count, _ := FileL.Read(data)
+
+	//
+	//
+	//
+	file_copy, _ := os.Create(file + ".crypt")
+
+	//
+	//
+	//
+	defer file_copy.Close()
+
+	//
+	//
+	//
+	ciphertext, _ := Encrypt(keyByte, data[:count])
+
+	///gravando arquivo cryptografado
+	file_copy.Write(ciphertext)
+
+}
+
 //
 // Only multiples of 16, ex: 16, 32, 64, 128 .. max 1024
 //
@@ -123,6 +181,9 @@ func ValidateKey(key string) {
 	}
 }
 
+//
+//
+//
 func Exists(fileName string) bool {
 
 	_, err := os.Stat(fileName)
