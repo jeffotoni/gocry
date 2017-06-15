@@ -267,7 +267,7 @@ func main() {
 		cry.Decrypt(keyUser, file)
 
 		boldYellow.Println("Used Key: [" + keyUser + "]")
-		boldYellow.Println("Decrypted file: [" + file + "]")
+		boldYellow.Println("Decrypted file: [" + file + "].descr")
 
 	} else {
 
