@@ -29,7 +29,7 @@ import (
 //
 // See alternate IV creation from ciphertext below
 // var iv = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}
-func Encrypt(key, text []byte) ([]byte, error) {
+func genCrypt(key, text []byte) ([]byte, error) {
 
 	block, err := aes.NewCipher(key)
 
@@ -102,7 +102,7 @@ func Crypt(keyUser string, file string) {
 	//
 	//
 	//
-	ciphertext, _ := Encrypt(keyByte, data[:count])
+	ciphertext, _ := genCrypt(keyByte, data[:count])
 
 	///gravando arquivo cryptografado
 	file_copy.Write(ciphertext)

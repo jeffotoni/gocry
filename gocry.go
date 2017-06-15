@@ -160,17 +160,6 @@ func main() {
 
 		case "descr":
 
-			stringCmd2 = strings.Trim(os.Args[x+1], "-")
-			stringCmd2 = strings.TrimSpace(stringCmd2)
-
-			if stringCmd2 != "" {
-
-				boldRed.Println("Error, command has no value!")
-				os.Exit(0)
-			}
-
-			//descr = fmt.Sprintf("%s", stringCmd2)
-
 			cmdIn += 3
 
 		case "file":
@@ -269,6 +258,16 @@ func main() {
 		//
 		// decrypt
 		//
+
+		if keyUser == "" {
+
+			keyUser = keyDefault
+		}
+
+		cry.Decrypt(keyUser, file)
+
+		boldYellow.Println("Used Key: [" + keyUser + "]")
+		boldYellow.Println("Decrypted file: [" + file + "]")
 
 	} else {
 
