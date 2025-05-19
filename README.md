@@ -6,7 +6,7 @@ It's cool that you will be able to use Crypt for your files.
 
 # Example of operation
 
-![image](https://github.com/jeffotoni/gocry/blob/master/img/gocry.gif)
+![gocry demo](img/gocry.gif)
 
 # Packages
 
