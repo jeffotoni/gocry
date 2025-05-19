@@ -11,7 +11,9 @@ As a public project, gocry welcomes contributions, bug reports, and feature requ
 
     • AES encryption and decryption of files and strings with customizable keys.
     • Supports key lengths and token generation ranging from 16 to 1024 bytes.
-    • Easy-to-use CLI with clear flags for encryption (--crypt), decryption (--descr), key   management (--key), and token generation (--token).
+    • Easy-to-use CLI with clear flags for encryption (--crypt), 
+      decryption (--descr), key   management (--key)
+      and token generation (--token).
     • Validates files before processing to prevent errors.
     • Colorful and informative terminal output for improved user experience.
     • Designed for seamless integration into Go projects or usage as a standalone utility.
